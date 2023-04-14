@@ -27,17 +27,18 @@ function chooseColor(depth) {
     else return "red";
 }
 
-function createMaps(earthquake) 
+function createMaps(earthquake){ 
+    var myMap = L.map("map", {
+        center: [37.09, -95.71],
+        zoom: 4,
+        layers: street
+    });
+       
     var street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(myMap);
 
-    var myMap = L.map("map", {
-        center: [37.09, -95.71],
-        zoom: 5,
-        layers: street
-    });
-
+   
     earthquake.forEach(function(quake) {
       var coords = quake.geometry.coordinates;
       var place = quake.properties.place;
@@ -49,9 +50,10 @@ function createMaps(earthquake)
           weight: .5,
           fillColor: chooseColor(coords[2]),
           radius: markerSize(mag)
-      }).bindPopup(`<h1>${place}</h1> <hr> <h3>Magnitude: ${mag} &emsp; Depth: ${coords[2]}</h3>`).addTo(myMap);
+      }) .bindPopup(`<h1>${place}</h1> <hr> <h3>Magnitude: ${mag} &emsp; Depth: ${coords[2]}</h3>`).addTo(myMap);
   });
-    // ------- Legend specific -------------------------------------------
+
+// ------- Legend specific -------------------------------------------
     var legend = L.control({ position: "bottomright" });
 
     legend.onAdd = function (map) {
@@ -68,3 +70,4 @@ function createMaps(earthquake)
     };
 
     legend.addTo(myMap);
+}
